@@ -40,7 +40,7 @@ private:
     ros::NodeHandle nh;
 
     ros::Subscriber subLaserCloud;
-    
+
     ros::Publisher pubFullCloud;
     ros::Publisher pubFullInfoCloud;
 
@@ -163,7 +163,7 @@ public:
     void copyPointCloud(const sensor_msgs::PointCloud2ConstPtr& laserCloudMsg){
 
         cloudHeader = laserCloudMsg->header;
-        cloudHeader.stamp = ros::Time::now(); // Ouster lidar users may need to uncomment this line
+        //cloudHeader.stamp = ros::Time::now(); // Ouster lidar users may need to uncomment this line
         pcl::fromROSMsg(*laserCloudMsg, *laserCloudIn);
         // Remove Nan points
         std::vector<int> indices;

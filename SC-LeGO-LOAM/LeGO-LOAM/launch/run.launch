@@ -1,7 +1,13 @@
 <launch>
     
+    
+    
+    <!--- Remap -->
+    
+    <remap from="imu/data" to="vectornav/IMU" />
+    
     <!--- Sim Time -->
-    <param name="/use_sim_time" value="false" />
+    <param name="/use_sim_time" value="true" />
 
     <!--- Run Rviz-->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find lego_loam)/launch/test.rviz" />
@@ -16,4 +22,6 @@
     <node pkg="lego_loam" type="mapOptmization"     name="mapOptmization"     output="screen"/>
     <node pkg="lego_loam" type="transformFusion"    name="transformFusion"    output="screen"/>
 
+
+    
 </launch>

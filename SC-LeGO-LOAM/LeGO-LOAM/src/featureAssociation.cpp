@@ -428,6 +428,39 @@ public:
         }
     }
 
+// VERSION <DATASET 1>: imu con lo rojo para arriba
+   void imuHandler(const sensor_msgs::Imu::ConstPtr& imuIn)
+    {
+        double roll, pitch, yaw;
+        tf::Quaternion orientation;
+        tf::quaternionMsgToTF(imuIn->orientation, orientation);
+        tf::Matrix3x3(orientation).getRPY(roll, pitch, yaw);
+
+        float accX = - imuIn->linear_acceleration.y - sin(roll) * cos(-pitch) * 9.81;
+        float accY = - imuIn->linear_acceleration.z - cos(roll) * cos(-pitch) * 9.81;
+        float accZ = imuIn->linear_acceleration.x + sin(-pitch) * 9.81;
+
+        imuPointerLast = (imuPointerLast + 1) % imuQueLength;
+
+        imuTime[imuPointerLast] = imuIn->header.stamp.toSec();
+
+        imuRoll[imuPointerLast] = roll;
+        imuPitch[imuPointerLast] = - pitch;
+        imuYaw[imuPointerLast] = - yaw;
+
+        imuAccX[imuPointerLast] = accX;
+        imuAccY[imuPointerLast] = accY;
+        imuAccZ[imuPointerLast] = accZ;
+
+        imuAngularVeloX[imuPointerLast] = imuIn->angular_velocity.x;
+        imuAngularVeloY[imuPointerLast] = - imuIn->angular_velocity.y;
+        imuAngularVeloZ[imuPointerLast] = - imuIn->angular_velocity.z;
+
+        AccumulateIMUShiftAndRotation();
+    }
+
+ // VERSION ORIGINAL
+   /*
     void imuHandler(const sensor_msgs::Imu::ConstPtr& imuIn)
     {
         double roll, pitch, yaw;
@@ -457,6 +490,8 @@ public:
 
         AccumulateIMUShiftAndRotation();
     }
+*/
+
 
     void laserCloudHandler(const sensor_msgs::PointCloud2ConstPtr& laserCloudMsg){
 
